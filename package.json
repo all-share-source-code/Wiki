@@ -1,0 +1,23 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "This is the BJStudio Wiki Page. The Wiki Page was opened at 17.03.2018.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/h12sw06/Wiki.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/h12sw06/Wiki/issues"
+  },
+  "homepage": "https://github.com/h12sw06/Wiki#readme",
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2"
+  }
+}
