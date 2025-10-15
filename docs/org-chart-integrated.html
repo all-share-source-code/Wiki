@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>통합 조직도 (Mermaid)</title>
+  <style>
+    :root { --bg: #ffffff; --fg: #222; }
+    html, body { height: 100%; }
+    body { margin: 0; background: var(--bg); color: var(--fg);
+           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                         "Noto Sans KR", "Apple SD Gothic Neo", Pretendard,
+                         Arial, sans-serif; }
+    main { max-width: 1280px; margin: 24px auto; padding: 16px; }
+    h1 { font-size: 20px; margin: 0 0 12px; }
+    .mermaid { margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>통합 조직도</h1>
+    <pre class="mermaid">%% 통합 조직도 (이미지1 기반 통합)
+%% 파일: docs/org-chart-integrated.mmd
+
+flowchart TB
+  %% 최상위
+  CEO["대표이사"]
+  VP["부사장"]
+  QA["품 질\n안전부"]
+
+  CEO --> VP
+  VP --> QA
+
+  %% 본사/공통 부문
+  GY["경 영\n지원실"]
+  DSG["도시가스\n사업부"]
+  HTE["하이테크\n사업부"]
+  MFG["기계설비\n조달사업부"]
+  OVP["외 주\n구매부"]
+
+  VP --> GY
+  VP --> DSG
+  VP --> HTE
+  VP --> MFG
+  VP --> OVP
+
+  %% 경영지원실 하위
+  GY1["자금 집행"]
+  GY2["노무 관리"]
+  GY3["조직 관리"]
+  GY --> GY1
+  GY --> GY2
+  GY --> GY3
+
+  %% 도시가스사업부 하위
+  DSG1["공동주택 사업"]
+  DSG2["상업시설"]
+  DSG3["공장 및 산업시설"]
+  DSG4["연구시설"]
+  DSG --> DSG1
+  DSG --> DSG2
+  DSG --> DSG3
+  DSG --> DSG4
+
+  %% 하이테크사업부 상위 (총괄)
+  subgraph HTE_Org[하이테크 조직도]
+    HTE_Head["하이테크총괄\n부사장"]
+    HTE --> HTE_Head
+
+    %% 하이테크 본부 팀
+    HTE_Plan["관리팀"]
+    HTE_Proc["공무팀"]
+    HTE_Elec["종합팀"]
+    HTE_Constr["공사팀"]
+    HTE_Safety["안전팀"]
+
+    HTE_Head --> HTE_Plan
+    HTE_Head --> HTE_Proc
+    HTE_Head --> HTE_Elec
+    HTE_Head --> HTE_Constr
+    HTE_Head --> HTE_Safety
+
+    %% 과/주임 등은 상세 인력정보이므로 생략 가능. 필요시 노드 추가
+  end
+
+  %% 하이테크사업부 기능별 업무 (이미지1 기반)
+  HTE_A1["반도체 유틸리티"]
+  HTE_A2["반도체 폐수/배관"]
+  HTE_A3["RETROFIT"]
+  HTE_A4["클린룸 배관"]
+  HTE_A5["소방배관"]
+  HTE --> HTE_A1
+  HTE --> HTE_A2
+  HTE --> HTE_A3
+  HTE --> HTE_A4
+  HTE --> HTE_A5
+
+  %% 기계설비/조달사업부 하위
+  MFG1["냉난방 설비"]
+  MFG2["조선소 유틸리티"]
+  MFG3["가열, 유체수"]
+  MFG4["조선임판"]
+  MFG5["신재생에너지"]
+  MFG --> MFG1
+  MFG --> MFG2
+  MFG --> MFG3
+  MFG --> MFG4
+  MFG --> MFG5
+
+  %% 외주구매부 하위
+  OVP1["PJT 별 외주구매"]
+  OVP2["자재조달"]
+  OVP3["원가/자재 관리"]
+  OVP --> OVP1
+  OVP --> OVP2
+  OVP --> OVP3
+
+  %% 품질안전부는 전사 지원(점선 표현을 위해 링크 스타일 지정)
+  QA -.-> GY
+  QA -.-> DSG
+  QA -.-> HTE
+  QA -.-> MFG
+  QA -.-> OVP
+
+  %% 스타일
+  classDef dept fill:#f6a,stroke:#d77,stroke-width:1px,color:#fff;
+  classDef sec fill:#f90,stroke:#d70,color:#fff;
+  classDef item fill:#fff,stroke:#bbb,color:#333;
+
+  class CEO,VP sec
+  class QA sec
+  class GY,DSG,HTE,MFG,OVP dept
+  class GY1,GY2,GY3,DSG1,DSG2,DSG3,DSG4,HTE_A1,HTE_A2,HTE_A3,HTE_A4,HTE_A5,MFG1,MFG2,MFG3,MFG4,MFG5,OVP1,OVP2,OVP3,HTE_Plan,HTE_Proc,HTE_Elec,HTE_Constr,HTE_Safety item
+</pre>
+  </main>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'default',
+      fontFamily: 'Pretendard, Noto Sans KR, Apple SD Gothic Neo, Segoe UI, Roboto, sans-serif' });
+  </script>
+</body>
+</html>
