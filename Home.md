@@ -8,3 +8,4 @@
 * [gollum](https://github.com/ByungJun25/Wiki/blob/master/gollum/kr/Installation.md)
 * [markdown](https://github.com/ByungJun25/Wiki/blob/master/Markdown/Markdown.md)
 * [Design Pattern](https://github.com/ByungJun25/Wiki/tree/master/JAVA/Design_Pattern)
+* [AI 성능 비교 그래프](AI-Performance-Comparison.md)

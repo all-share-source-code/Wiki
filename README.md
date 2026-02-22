@@ -11,3 +11,7 @@ This is the BJStudio Wiki Page. The Wiki Page was opened at 17.03.2018.
 * 개인 프로젝트
   * 안드로이드 프로젝트
   * 유니티 기반 게임 프로젝트
+
+## 3. 바로가기
+* [Home](Home.md)
+* [AI 성능 비교 그래프](AI-Performance-Comparison.md)
