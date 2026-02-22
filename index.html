@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 모델 성능 비교 | AI Benchmark Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">AI</div>
+                    <div>
+                        <h1>AI Benchmark Dashboard</h1>
+                        <p class="subtitle">2025-2026 주요 AI 모델 성능 비교 분석</p>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <span class="badge">2026년 2월 기준</span>
+                    <span class="badge badge-outline">v2.0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Stats Overview -->
+        <section class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">비교 모델 수</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">7</div>
+                <div class="stat-label">벤치마크 종류</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">93.2%</div>
+                <div class="stat-label">최고 GPQA 점수</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">1402</div>
+                <div class="stat-label">최고 Arena Elo</div>
+            </div>
+        </section>
+
+        <!-- Chart Controls -->
+        <section class="controls-section">
+            <div class="card">
+                <div class="controls-header">
+                    <h2>벤치마크 선택</h2>
+                    <p>비교하고 싶은 벤치마크를 선택하세요</p>
+                </div>
+                <div class="benchmark-tabs" id="benchmarkTabs">
+                    <button class="tab active" data-benchmark="overall">종합 순위</button>
+                    <button class="tab" data-benchmark="mmlu">MMLU-Pro</button>
+                    <button class="tab" data-benchmark="gpqa">GPQA Diamond</button>
+                    <button class="tab" data-benchmark="humaneval">HumanEval</button>
+                    <button class="tab" data-benchmark="swebench">SWE-Bench</button>
+                    <button class="tab" data-benchmark="math">MATH</button>
+                    <button class="tab" data-benchmark="simplebench">SimpleBench</button>
+                </div>
+                <div class="chart-type-toggle">
+                    <span>차트 유형:</span>
+                    <button class="chart-toggle active" data-type="bar" id="btnBar">막대 그래프</button>
+                    <button class="chart-toggle" data-type="radar" id="btnRadar">레이더 차트</button>
+                    <button class="chart-toggle" data-type="polar" id="btnPolar">폴라 차트</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Chart -->
+        <section class="chart-section">
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <h2 id="chartTitle">종합 순위 비교</h2>
+                    <p id="chartDescription">주요 AI 모델들의 종합 벤치마크 점수를 비교합니다</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Radar Comparison -->
+        <section class="chart-section">
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <h2>다차원 성능 비교 (레이더)</h2>
+                    <p>상위 5개 모델의 전 벤치마크 성능을 한눈에 비교합니다</p>
+                </div>
+                <div class="model-selector" id="modelSelector">
+                    <!-- dynamically populated -->
+                </div>
+                <div class="chart-container chart-container-lg">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trend / Timeline -->
+        <section class="chart-section">
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <h2>AI 모델 성능 발전 타임라인</h2>
+                    <p>2023년부터 2026년까지 주요 AI 모델의 MMLU 점수 변화 추이</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="timelineChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cost vs Performance -->
+        <section class="chart-section">
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <h2>가격 대비 성능 분석</h2>
+                    <p>1M 토큰당 출력 비용($) vs 종합 성능 점수 (원 크기 = SWE-Bench 점수)</p>
+                </div>
+                <div class="chart-container chart-container-lg">
+                    <canvas id="bubbleChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Table -->
+        <section class="chart-section">
+            <div class="card">
+                <div class="chart-header">
+                    <h2>전체 벤치마크 데이터</h2>
+                    <p>모든 모델의 상세 벤치마크 점수 테이블</p>
+                </div>
+                <div class="table-wrapper">
+                    <table id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>순위</th>
+                                <th>모델</th>
+                                <th>제작사</th>
+                                <th>MMLU-Pro</th>
+                                <th>GPQA</th>
+                                <th>HumanEval</th>
+                                <th>SWE-Bench</th>
+                                <th>MATH</th>
+                                <th>SimpleBench</th>
+                                <th>Arena Elo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benchmark Explanations -->
+        <section class="info-section">
+            <h2>벤치마크 설명</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">📚</div>
+                    <h3>MMLU-Pro</h3>
+                    <p>Massive Multitask Language Understanding의 확장판. 57개 이상의 학문 분야에 걸친 지식과 추론 능력을 평가합니다.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🔬</div>
+                    <h3>GPQA Diamond</h3>
+                    <p>Graduate-Level Google-Proof Q&A. 대학원 수준의 과학 질문으로, 전문가조차 어려워하는 문제들을 포함합니다.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">💻</div>
+                    <h3>HumanEval</h3>
+                    <p>코드 생성 능력을 평가하는 벤치마크. Python 함수를 올바르게 생성하는 능력을 테스트합니다.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🛠️</div>
+                    <h3>SWE-Bench Verified</h3>
+                    <p>실제 GitHub 이슈를 해결하는 소프트웨어 엔지니어링 능력 평가. 실무 코딩 능력의 핵심 지표입니다.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🧮</div>
+                    <h3>MATH</h3>
+                    <p>수학 경시대회 수준의 문제 해결 능력을 평가합니다. 고급 수학적 추론 능력이 필요합니다.</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🧠</div>
+                    <h3>SimpleBench</h3>
+                    <p>상식적 추론 능력을 평가하는 벤치마크. AI의 일반 상식과 논리적 사고력을 테스트합니다.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>데이터 출처: LM Council, Awesome Agents, LLM Stats, CodeSOTA (2026년 2월 기준)</p>
+            <p>이 대시보드는 공개된 벤치마크 데이터를 기반으로 합니다. 실제 성능은 사용 환경에 따라 다를 수 있습니다.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
